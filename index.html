@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English_comprehension_quiz</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial;
+            background: black;
+            color: white;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 15px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #00ffcc;
+        }
+
+        .timer {
+            text-align: center;
+            color: yellow;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .options div {
+            background: #2a2a2a;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .options div:hover {
+            background: #444;
+        }
+
+        .selected {
+            background: #007bff !important;
+        }
+
+        .correct {
+            background: green !important;
+        }
+
+        .wrong {
+            background: red !important;
+        }
+
+        .answer-text {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        #submitBtn {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            background: orange;
+            border: none;
+            border-radius: 10px;
+        }
+
+        .result {
+            text-align: center;
+            font-size: 22px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>SSC Reasoning Quiz (Hard - Hindi)</h1>
+        <div class="timer" id="timer">Time: 30:00</div>
+
+        <div id="quiz"></div>
+
+        <button id="submitBtn">Result देखें</button>
+
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+
+        const questions = [
+            { q: "Choose the correct synonym of 'Abundant'", options: ["Plenty", "Rare", "Small", "Weak"], answer: 0 },
+            { q: "Antonym of 'Ancient' is:", options: ["Old", "Modern", "Past", "Historic"], answer: 1 },
+            { q: "Meaning of 'Break the ice' is:", options: ["To freeze water", "Start conversation", "End meeting", "Break object"], answer: 1 },
+            { q: "Choose correct spelling:", options: ["Neccessary", "Necessary", "Necessarye", "Necassary"], answer: 1 },
+            { q: "Opposite of 'Honest' is:", options: ["Kind", "Loyal", "Dishonest", "Brave"], answer: 2 },
+
+            { q: "Synonym of 'Rapid' is:", options: ["Slow", "Fast", "Weak", "Late"], answer: 1 },
+            { q: "Meaning of 'Piece of cake' is:", options: ["Difficult task", "Easy task", "Cake piece", "Food item"], answer: 1 },
+            { q: "Antonym of 'Victory' is:", options: ["Defeat", "Win", "Success", "Prize"], answer: 0 },
+            { q: "Choose correct sentence:", options: ["He go to school", "He goes to school", "He going school", "He gone school"], answer: 1 },
+            { q: "Synonym of 'Happy' is:", options: ["Sad", "Angry", "Joyful", "Tired"], answer: 2 },
+
+            { q: "Meaning of 'Once in a blue moon' is:", options: ["Always", "Rarely", "Never", "Often"], answer: 1 },
+            { q: "Antonym of 'Dark' is:", options: ["Black", "Bright", "Heavy", "Light"], answer: 1 },
+            { q: "Correct spelling:", options: ["Occassion", "Occasion", "Ocasion", "Occasson"], answer: 1 },
+            { q: "Synonym of 'Strong' is:", options: ["Weak", "Powerful", "Small", "Soft"], answer: 1 },
+            { q: "Opposite of 'Increase' is:", options: ["Grow", "Rise", "Decrease", "Add"], answer: 2 },
+
+            { q: "Meaning of 'Under the weather' is:", options: ["Healthy", "Sick", "Cold weather", "Happy"], answer: 1 },
+            { q: "Synonym of 'Beautiful' is:", options: ["Ugly", "Pretty", "Bad", "Weak"], answer: 1 },
+            { q: "Antonym of 'Begin' is:", options: ["Start", "End", "Open", "Go"], answer: 1 },
+            { q: "Correct spelling:", options: ["Accomodation", "Accommodation", "Acommodation", "Accommadation"], answer: 1 },
+            { q: "Synonym of 'Quick' is:", options: ["Slow", "Fast", "Late", "Weak"], answer: 1 },
+
+            { q: "Meaning of 'Hit the nail on the head' is:", options: ["Miss target", "Do correctly", "Hit object", "Fail"], answer: 1 },
+            { q: "Opposite of 'Rich' is:", options: ["Wealthy", "Poor", "Strong", "Big"], answer: 1 },
+            { q: "Synonym of 'Clever' is:", options: ["Smart", "Dumb", "Weak", "Slow"], answer: 0 },
+            { q: "Correct sentence:", options: ["She are happy", "She is happy", "She happy is", "She be happy"], answer: 1 },
+            { q: "Antonym of 'Full' is:", options: ["Empty", "Packed", "Heavy", "Large"], answer: 0 },
+
+            { q: "Meaning of 'Barking up the wrong tree' is:", options: ["Correct action", "Wrong assumption", "Tree cutting", "Success"], answer: 1 },
+            { q: "Synonym of 'Big' is:", options: ["Small", "Large", "Tiny", "Weak"], answer: 1 },
+            { q: "Opposite of 'Love' is:", options: ["Hate", "Like", "Care", "Friendship"], answer: 0 },
+            { q: "Correct spelling:", options: ["Recieve", "Receive", "Receeve", "Receve"], answer: 1 },
+            { q: "Synonym of 'Dangerous' is:", options: ["Safe", "Risky", "Easy", "Simple"], answer: 1 },
+
+            { q: "Meaning of 'Spill the beans' is:", options: ["Cook food", "Reveal secret", "Break beans", "Eat food"], answer: 1 },
+            { q: "Antonym of 'True' is:", options: ["Right", "False", "Real", "Correct"], answer: 1 },
+            { q: "Synonym of 'Angry' is:", options: ["Happy", "Mad", "Calm", "Cool"], answer: 1 },
+            { q: "Correct sentence:", options: ["I is student", "I am a student", "I are student", "I be student"], answer: 1 },
+            { q: "Opposite of 'Light' is:", options: ["Heavy", "Bright", "Soft", "Easy"], answer: 0 },
+
+            { q: "Meaning of 'Cost an arm and a leg' is:", options: ["Very cheap", "Very expensive", "Free", "Broken"], answer: 1 },
+            { q: "Synonym of 'Begin' is:", options: ["Start", "End", "Stop", "Close"], answer: 0 },
+            { q: "Antonym of 'Cold' is:", options: ["Hot", "Cool", "Freeze", "Ice"], answer: 0 },
+            { q: "Correct spelling:", options: ["Definately", "Definitely", "Definetly", "Definatly"], answer: 1 },
+            { q: "Synonym of 'Lazy' is:", options: ["Active", "Idle", "Fast", "Smart"], answer: 1 },
+
+            { q: "Meaning of 'Break a leg' is:", options: ["Injury", "Good luck", "Fall down", "Fight"], answer: 1 },
+            { q: "Opposite of 'Old' is:", options: ["Young", "Ancient", "Past", "Weak"], answer: 0 },
+            { q: "Synonym of 'Fast' is:", options: ["Quick", "Slow", "Late", "Weak"], answer: 0 },
+            { q: "Correct sentence:", options: ["They is coming", "They are coming", "They be coming", "They am coming"], answer: 1 },
+            { q: "Antonym of 'Success' is:", options: ["Victory", "Failure", "Win", "Prize"], answer: 1 }
+        ];
+
+        let userAnswers = new Array(questions.length).fill(null);
+        const quiz = document.getElementById("quiz");
+
+        questions.forEach((item, index) => {
+            let div = document.createElement("div");
+            div.classList.add("question");
+
+            let q = document.createElement("p");
+            q.innerText = item.q;
+            div.appendChild(q);
+
+            let optDiv = document.createElement("div");
+            optDiv.classList.add("options");
+
+            let answerText = document.createElement("div");
+            answerText.classList.add("answer-text");
+
+            item.options.forEach((opt, i) => {
+                let option = document.createElement("div");
+                option.innerText = opt;
+
+                option.onclick = () => {
+                    userAnswers[index] = i;
+                    [...optDiv.children].forEach(el => el.classList.remove("selected"));
+                    option.classList.add("selected");
+                };
+
+                optDiv.appendChild(option);
+            });
+
+            div.appendChild(optDiv);
+            div.appendChild(answerText);
+            quiz.appendChild(div);
+        });
+
+        document.getElementById("submitBtn").onclick = () => {
+            let score = 0;
+
+            document.querySelectorAll(".question").forEach((qDiv, index) => {
+                const options = qDiv.querySelectorAll(".options div");
+                const answerText = qDiv.querySelector(".answer-text");
+
+                options.forEach((opt, i) => {
+                    if (i === questions[index].answer) opt.classList.add("correct");
+                    if (userAnswers[index] === i && i !== questions[index].answer) opt.classList.add("wrong");
+                });
+
+                if (userAnswers[index] === questions[index].answer) score++;
+            });
+
+            document.getElementById("result").innerText =
+                "आपका स्कोर: " + score + " / " + questions.length;
+        };
+
+        let time = 1800;
+        setInterval(() => {
+            let m = Math.floor(time / 60);
+            let s = time % 60;
+
+            document.getElementById("timer").innerText =
+                "Time: " + (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
+
+            if (time > 0) time--;
+        }, 1000);
+
+        document.getElementById("submitBtn").onclick = () => {
+            let score = 0;
+            let notAttempted = 0;
+
+            document.querySelectorAll(".question").forEach((qDiv, index) => {
+                const options = qDiv.querySelectorAll(".options div");
+                const answerText = qDiv.querySelector(".answer-text");
+
+                options.forEach((opt, i) => {
+                    if (i === questions[index].answer) opt.classList.add("correct");
+
+                    if (userAnswers[index] === i && i !== questions[index].answer) {
+                        opt.classList.add("wrong");
+                    }
+                });
+
+                let selected, correct;
+
+                if (userAnswers[index] === null) {
+                    selected = "❌ Not Attempted";
+                    notAttempted++;
+                } else {
+                    selected = questions[index].options[userAnswers[index]];
+                }
+
+                correct = questions[index].options[questions[index].answer];
+
+                answerText.innerHTML =
+                    "👉 आपका उत्तर: " + selected + "<br>✅ सही उत्तर: " + correct;
+
+                if (userAnswers[index] === questions[index].answer) {
+                    score++;
+                }
+            });
+
+            document.getElementById("result").innerHTML =
+                "🎯 आपका स्कोर: " + score + " / " + questions.length +
+                "<br>❌ Not Attempted: " + notAttempted;
+        };
+
+    </script>
+
+</body>
+
+</html>
